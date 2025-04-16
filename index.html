@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoVenta - Vehículos de Servicio Público</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style id="app-style">
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #e63946;
+            --dark-color: #1d3557;
+            --light-color: #f1faee;
+            --accent-color: #a8dadc;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-text {
+            max-width: 800px;
+            z-index: 2;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .navbar {
+            background-color: var(--dark-color);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--light-color) !important;
+        }
+        
+        .nav-link {
+            color: var(--light-color) !important;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .vehicle-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .badge-publicservice {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .features-section {
+            background-color: var(--light-color);
+            padding: 80px 0;
+        }
+        
+        .feature-box {
+            padding: 30px;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .management-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .form-section {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-links h5 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .social-icons {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 767px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section {
+                height: 60vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="javascript:void(0)">
+                <i class="fas fa-car-side"></i> AutoVenta SP
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Vehículos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Financiamiento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-text">
+            <h1>La mejor selección de vehículos de servicio público</h1>
+            <p class="lead mb-4">Ofrecemos carros y camionetas de calidad para su negocio de transporte público. Financiamiento disponible y garantía incluida.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="javascript:void(0)" class="btn btn-primary btn-lg">Ver catálogo</a>
+                <a href="javascript:void(0)" class="btn btn-outline-light btn-lg">Contactar asesor</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Vehicles Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">Vehículos Destacados</h2>
+            <div class="row g-4" id="featuredVehicles">
+                <!-- Vehicle cards will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">¿Por qué elegirnos?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h4>Vehículos Certificados</h4>
+                        <p>Todos nuestros vehículos pasan por un riguroso proceso de inspección y certificación.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <h4>Financiamiento Flexible</h4>
+                        <p>Opciones de financiamiento adaptadas a su negocio y capacidad de pago.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h4>Servicio Post-Venta</h4>
+                        <p>Asesoría técnica, mantenimiento y repuestos originales para su vehículo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vehicle Management Section -->
+    <section class="management-section" id="management">
+        <div class="container">
+            <h2 class="section-title">Administración de Vehículos</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="form-section">
+                        <h4 class="mb-4">Agregar / Editar Vehículo</h4>
+                        <form id="vehicleForm">
+                            <input type="hidden" id="vehicleId">
+                            <div class="mb-3">
+                                <label for="brand" class="form-label">Marca</label>
+                                <input type="text" class="form-control" id="brand" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="model" class="form-label">Modelo</label>
+                                <input type="text" class="form-control" id="model" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="year" class="form-label">Año</label>
+                                <input type="number" class="form-control" id="year" min="1990" max="2025" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Precio ($)</label>
+                                <input type="number" class="form-control" id="price" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Tipo</label>
+                                <select class="form-select" id="type" required>
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="Sedan">Sedan</option>
+                                    <option value="Camioneta">Camioneta</option>
+                                    <option value="Microbus">Microbus</option>
+                                    <option value="Buseta">Buseta</option>
+                                    <option value="Bus">Bus</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="capacity" class="form-label">Capacidad (pasajeros)</label>
+                                <input type="number" class="form-control" id="capacity" min="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="description" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="imageUrl" class="form-label">URL de Imagen</label>
+                                <input type="url" class="form-control" id="imageUrl" required>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Guardar Vehículo</button>
+                                <button type="button" id="clearForm" class="btn btn-secondary">Limpiar Formulario</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <h4 class="mb-4">Listado de Vehículos</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Marca/Modelo</th>
+                                    <th>Año</th>
+                                    <th>Tipo</th>
+                                    <th>Precio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vehicleList">
+                                <!-- Vehicle list will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">¿Listo para adquirir su vehículo de servicio público?</h2>
+            <p class="lead mb-4">Contáctenos hoy mismo y un asesor especializado le atenderá para resolver todas sus dudas.</p>
+            <a href="javascript:void(0)" class="btn btn-light btn-lg">Solicitar información</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 mb-4">
+                    <h5>AutoVenta SP</h5>
+                    <p>Especialistas en vehículos para servicio público. Brindamos soluciones de transporte para su negocio desde 2010.</p>
+                    <div class="mt-4">
+                        <a href="javascript:void(0)" class="text-white social-icons"><i class="fab fa-facebook"></i></a>
+                        <a href="javascript:void(0)" class="text-white social-icons"><i class="fab fa-instagram"></i></a>
+                        <a href="javascript:void(0)" class="text-white social-icons"><i class="fab fa-twitter"></i></a>
+                        <a href="javascript:void(0)" class="text-white social-icons"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4 footer-links">
+                    <h5>Enlaces rápidos</h5>
+                    <ul>
+                        <li><a href="javascript:void(0)">Inicio</a></li>
+                        <li><a href="javascript:void(0)">Sobre nosotros</a></li>
+                        <li><a href="javascript:void(0)">Vehículos</a></li>
+                        <li><a href="javascript:void(0)">Servicios</a></li>
+                        <li><a href="javascript:void(0)">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 footer-links">
+                    <h5>Servicios</h5>
+                    <ul>
+                        <li><a href="javascript:void(0)">Compra de vehículos</a></li>
+                        <li><a href="javascript:void(0)">Financiamiento</a></li>
+                        <li><a href="javascript:void(0)">Mantenimiento</a></li>
+                        <li><a href="javascript:void(0)">Repuestos</a></li>
+                        <li><a href="javascript:void(0)">Seguros</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Contáctenos</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Av. Principal #123, Ciudad</p>
+                    <p><i class="fas fa-phone me-2"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@autoventasp.com</p>
+                    <p><i class="fas fa-clock me-2"></i> Lun-Sáb: 8:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            <div class="text-center copyright">
+                <p>&copy; 2025 AutoVenta SP. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script id="app-script">
+        $(document).ready(function() {
+            // Initialize vehicles from localStorage or use sample data if empty
+            let vehicles = JSON.parse(localStorage.getItem('vehicles')) || [];
+            
+            if (vehicles.length === 0) {
+                // Sample data for initial display
+                vehicles = [
+                    {
+                        id: 1,
+                        brand: 'Toyota',
+                        model: 'Hiace',
+                        year: 2023,
+                        type: 'Microbus',
+                        price: 45000,
+                        capacity: 14,
+                        description: 'Microbus ideal para rutas urbanas. Excelente consumo de combustible y fácil mantenimiento.',
+                        imageUrl: 'https://images.unsplash.com/photo-1616455261523-093f2e4c5da7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+                    },
+                    {
+                        id: 2,
+                        brand: 'Chevrolet',
+                        model: 'NPR',
+                        year: 2024,
+                        type: 'Buseta',
+                        price: 65000,
+                        capacity: 24,
+                        description: 'Buseta completa con capacidad para 24 pasajeros. Perfecta para rutas escolares o empresariales.',
+                        imageUrl: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+                    },
+                    {
+                        id: 3,
+                        brand: 'Nissan',
+                        model: 'Urvan',
+                        year: 2023,
+                        type: 'Microbus',
+                        price: 42000,
+                        capacity: 12,
+                        description: 'Microbus confortable y eficiente para servicio ejecutivo. Interior tapizado de lujo.',
+                        imageUrl: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+                    },
+                    {
+                        id: 4,
+                        brand: 'Kia',
+                        model: 'Grand Carnival',
+                        year: 2024,
+                        type: 'Camioneta',
+                        price: 38000,
+                        capacity: 8,
+                        description: 'Camioneta de lujo para servicio especial. Ideal para transporte ejecutivo o turístico.',
+                        imageUrl: 'https://images.unsplash.com/photo-1551746930-6a3b96ec9c78?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+                    }
+                ];
+                // Save sample data to localStorage
+                localStorage.setItem('vehicles', JSON.stringify(vehicles));
+            }
+
+            // Function to display featured vehicles
+            function displayFeaturedVehicles() {
+                const featuredContainer = $('#featuredVehicles');
+                featuredContainer.empty();
+                
+                // Display up to 4 vehicles in featured section
+                const featuredVehicles = vehicles.slice(0, 4);
+                
+                featuredVehicles.forEach(vehicle => {
+                    const card = `
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card vehicle-card">
+                                <img src="${vehicle.imageUrl}" class="card-img-top" alt="${vehicle.brand} ${vehicle.model}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${vehicle.brand} ${vehicle.model}</h5>
+                                    <span class="badge badge-publicservice mb-2">${vehicle.type}</span>
+                                    <p class="card-text">
+                                        <strong>Año:</strong> ${vehicle.year}<br>
+                                        <strong>Capacidad:</strong> ${vehicle.capacity} pasajeros
+                                    </p>
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="text-primary">$${vehicle.price.toLocaleString()}</h5>
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary">Ver detalles</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    featuredContainer.append(card);
+                });
+            }
+
+            // Function to display all vehicles in the table
+            function displayVehicleList() {
+                const vehicleListContainer = $('#vehicleList');
+                vehicleListContainer.empty();
+                
+                vehicles.forEach(vehicle => {
+                    const row = `
+                        <tr>
+                            <td><img src="${vehicle.imageUrl}" alt="${vehicle.brand}" width="80" height="60" class="rounded"></td>
+                            <td>${vehicle.brand} ${vehicle.model}</td>
+                            <td>${vehicle.year}</td>
+                            <td>${vehicle.type}</td>
+                            <td>$${vehicle.price.toLocaleString()}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary edit-vehicle" data-id="${vehicle.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-vehicle" data-id="${vehicle.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    vehicleListContainer.append(row);
+                });
+                
+                // Add event listeners to edit and delete buttons
+                $('.edit-vehicle').click(function() {
+                    const vehicleId = $(this).data('id');
+                    editVehicle(vehicleId);
+                });
+                
+                $('.delete-vehicle').click(function() {
+                    const vehicleId = $(this).data('id');
+                    deleteVehicle(vehicleId);
+                });
+            }
+
+            // Function to add a new vehicle or update existing one
+            function saveVehicle(event) {
+                event.preventDefault();
+                
+                const vehicleId = $('#vehicleId').val();
+                const vehicle = {
+                    brand: $('#brand').val(),
+                    model: $('#model').val(),
+                    year: parseInt($('#year').val()),
+                    price: parseInt($('#price').val()),
+                    type: $('#type').val(),
+                    capacity: parseInt($('#capacity').val()),
+                    description: $('#description').val(),
+                    imageUrl: $('#imageUrl').val()
+                };
+                
+                if (vehicleId) {
+                    // Update existing vehicle
+                    vehicle.id = parseInt(vehicleId);
+                    const index = vehicles.findIndex(v => v.id === parseInt(vehicleId));
+                    if (index !== -1) {
+                        vehicles[index] = vehicle;
+                    }
+                } else {
+                    // Add new vehicle
+                    vehicle.id = vehicles.length > 0 ? Math.max(...vehicles.map(v => v.id)) + 1 : 1;
+                    vehicles.push(vehicle);
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('vehicles', JSON.stringify(vehicles));
+                
+                // Clear form and refresh displays
+                clearForm();
+                displayFeaturedVehicles();
+                displayVehicleList();
+                
+                // Show success alert
+                alert('Vehículo guardado correctamente.');
+            }
+
+            // Function to edit a vehicle
+            function editVehicle(id) {
+                const vehicle = vehicles.find(v => v.id === parseInt(id));
+                if (vehicle) {
+                    $('#vehicleId').val(vehicle.id);
+                    $('#brand').val(vehicle.brand);
+                    $('#model').val(vehicle.model);
+                    $('#year').val(vehicle.year);
+                    $('#price').val(vehicle.price);
+                    $('#type').val(vehicle.type);
+                    $('#capacity').val(vehicle.capacity);
+                    $('#description').val(vehicle.description);
+                    $('#imageUrl').val(vehicle.imageUrl);
+                    
+                    // Scroll to form
+                    $('html, body').animate({
+                        scrollTop: $('#vehicleForm').offset().top - 100
+                    }, 1000);
+                }
+            }
+
+            // Function to delete a vehicle
+            function deleteVehicle(id) {
+                if (confirm('¿Está seguro de que desea eliminar este vehículo?')) {
+                    vehicles = vehicles.filter(v => v.id !== parseInt(id));
+                    localStorage.setItem('vehicles', JSON.stringify(vehicles));
+                    displayFeaturedVehicles();
+                    displayVehicleList();
+                }
+            }
+
+            // Function to clear the form
+            function clearForm() {
+                $('#vehicleId').val('');
+                $('#vehicleForm')[0].reset();
+            }
+
+            // Event listeners
+            $('#vehicleForm').submit(saveVehicle);
+            $('#clearForm').click(clearForm);
+
+            // Initial display
+            displayFeaturedVehicles();
+            displayVehicleList();
+        });
+    </script>
+</body>
+</html>
